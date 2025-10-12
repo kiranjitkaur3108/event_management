@@ -6,6 +6,8 @@ use App\Http\Controllers\ContactController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\Auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+//for feedback:
+Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
+Route::post('/feedback', [FeedbackController::class, 'submit'])->name('feedback.submit');
+Route::get('/thank-you', [FeedbackController::class, 'thankYou'])->name('feedback.thankyou');
 
 /*
 |--------------------------------------------------------------------------
@@ -67,27 +73,8 @@ Route::post('/login', function (Request $request) {
 | Registration Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/register', function () {
-    return view('register');
-})->name('register');
-
-Route::post('/register', function (Request $request) {
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|min:6|confirmed',
-    ]);
-
-    $user = new User();
-    $user->name = $request->name;
-    $user->email = $request->email;
-    $user->password = Hash::make($request->password);
-    $user->is_admin = 0;
-    $user->save();
-
-    session(['role' => 'user', 'user_id' => $user->id]);
-    return redirect('/home')->with('success', 'Registration successful! Welcome.');
-});
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
 
 /*
 |--------------------------------------------------------------------------

@@ -1,11 +1,34 @@
-<footer class="bg-dark text-light py-4 mt-5">
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    footer a.text-light:hover {
+        color: rgba(255, 255, 255, 0.9);
+        text-decoration: none;
+    }
+</style>
+
+<footer class="text-light py-4 mt-5" style="background-color: #ae674e;">
     <div class="container text-center">
 
         <p class="mb-2">&copy; {{ date('Y') }} CELEBRATIONS | All Rights Reserved</p>
 
         <div class="mb-3">
             <a href="{{ url('about') }}" class="text-light text-decoration-none mx-2">About Us</a>
-            <a href="{{ url('services') }}" class="text-light text-decoration-none mx-2">Our Services</a>
+            <a href="{{ url('login') }}" class="text-light text-decoration-none mx-2">Our Services</a>
             <a href="{{ url('gallery') }}" class="text-light text-decoration-none mx-2">Gallery</a>
             <a href="{{ url('contact') }}" class="text-light text-decoration-none mx-2">Contact</a>
             <a href="{{ url('feedback') }}" class="text-light text-decoration-none mx-2">Feedback</a>

@@ -1,16 +1,121 @@
 @extends('layouts.app')
 
-@section('title', 'Register')
+@section('title', 'Register | Celebrations')
 
 @section('content')
-<div class="container my-5" style="max-width: 500px;">
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <h2 class="text-center mb-4">User Registration</h2>
 
+    <style>
+        .registration-section {
+            padding: 60px 20px;
+            border-radius: 10px;
+            margin: 40px auto;
+            max-width: 900px;
+            display: flex;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background-color: rgba(255, 251, 248, 0.95);
+        }
+
+        .registration-left {
+            flex: 1 1 40%;
+            padding: 30px;
+            color: #fff;
+            background: rgba(79, 76, 76, 0.8);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .registration-left h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .registration-left p {
+            font-size: 16px;
+        }
+
+        .registration-right {
+            flex: 1 1 60%;
+            padding: 30px;
+            background: transparent;
+        }
+
+        .registration-right h2 {
+            color: #6A3F3F;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .registration-right form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .registration-right form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #6A3F3F;
+        }
+
+        .registration-right form input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .registration-right form button {
+            padding: 12px;
+            background-color: #c06817ff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .registration-right form button:hover {
+            background-color: #8A5C5C;
+        }
+
+        .thank-you-message {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+            color: #6A3F3F;
+            font-weight: bold;
+        }
+
+        .login-link {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #6A3F3F;
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="registration-section">
+        <div class="registration-left">
+            <h1><i class="fa-solid fa-gift"></i> Celebrations</h1>
+            <p>Join us to create unforgettable moments! Fill out the form to get started.</p>
+        </div>
+
+        <div class="registration-right">
+            <h2>Create Your Account</h2>
+
+            <!-- Display validation errors -->
             @if ($errors->any())
                 <div class="alert alert-danger">
-                    <ul class="mb-0">
+                    <ul>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -18,36 +123,44 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register') }}">
+            <form method="POST" action="{{ url('/register') }}" id="registrationForm">
                 @csrf
 
-                <div class="mb-3">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
-                </div>
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your Name" value="{{ old('name') }}" required>
 
-                <div class="mb-3">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
-                </div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Your Email" value="{{ old('email') }}" required>
 
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Your Password" required>
 
-                <div class="mb-3">
-                    <label class="form-label">Confirm Password</label>
-                    <input type="password" name="password_confirmation" class="form-control" required>
-                </div>
+                <label for="password_confirmation">Confirm Password</label>
+                <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required>
 
-                <button type="submit" class="btn btn-primary w-100">Register</button>
+                <button type="submit">Register</button>
             </form>
 
-            <div class="text-center mt-3">
-                <a href="{{ route('role.select') }}">← Back to Login</a>
+            <div id="thankYouMessage" class="thank-you-message">
+                <h3>Thank You for Registering!</h3>
+                <p>We're excited to have you.</p>
             </div>
+
+            <p class="login-link">Already registered? <a href="{{ route('login') }}">Login here</a>.</p>
         </div>
     </div>
-</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('registrationForm');
+            const thankYouMessage = document.getElementById('thankYouMessage');
+
+            form.addEventListener('submit', function () {
+                // Show thank-you message after submit
+                thankYouMessage.style.display = 'block';
+                form.style.display = 'none';
+            });
+        });
+    </script>
+
 @endsection
