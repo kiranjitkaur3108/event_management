@@ -28,7 +28,7 @@
 
         <div class="mb-3">
             <a href="{{ url('about') }}" class="text-light text-decoration-none mx-2">About Us</a>
-            <a href="{{ url('login') }}" class="text-light text-decoration-none mx-2">Our Services</a>
+            <a href="{{ url('/services') }}" class="text-light text-decoration-none mx-2">Services</a>
             <a href="{{ url('gallery') }}" class="text-light text-decoration-none mx-2">Gallery</a>
             <a href="{{ url('contact') }}" class="text-light text-decoration-none mx-2">Contact</a>
             <a href="{{ url('feedback') }}" class="text-light text-decoration-none mx-2">Feedback</a>

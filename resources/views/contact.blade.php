@@ -2,150 +2,130 @@
 
 @section('title', 'Contact Us')
 
-@section('styles')
+@section('content')
     <style>
         body {
-            background-color: #ede1da;
-        }
-        .bg-contact-header {
-            background-color: #b88f7f;
-            color: #fff;
-            border-top-left-radius: .75rem;
-            border-top-right-radius: .75rem;
-        }
-        .contact-header {
-            font-family: 'Pacifico', 'cursive';
-            font-style: italic;
-            font-size: 2rem;
-            font-weight: 400;
-            color: #fff;
-        }
-        .contact-subtitle {
-            font-size: 1rem;
-            font-weight: 400;
+            background-color: #f4e9dd;
         }
 
-        .contact-info-item {
+        .contact-container {
+            max-width: 900px;
+            margin: 60px auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .contact-title {
+            font-size: 30px;
+            font-weight: bolder;
+            margin-bottom: 35px;
+            color: #ae674e;
+            text-align: center;
+        }
+
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: space-between;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+            font-size: 16px;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .contact-info p {
             display: flex;
             align-items: center;
-            margin-bottom: 1rem;
-            color: #b88f7f;
-            font-weight: 500;
-        }
-        .contact-icon {
-            font-size: 1.2rem;
-            margin-right: 0.75rem;
+            margin-bottom: 15px;
         }
 
-        .input-field {
+        .contact-info i {
+            color: #ae674e;
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
             width: 100%;
-            padding: 0.6rem 1rem;
+            padding: 12px;
             border: 1px solid #ccc;
-            border-radius: .5rem;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #b88f7f;
-            box-shadow: 0 0 5px rgba(184, 143, 127, 0.5);
+            border-radius: 6px;
+            font-size: 15px;
+            margin-bottom: 15px;
         }
 
-        .send-btn {
-            background-color: #b88f7f;
-            color: #fff;
-            padding: 0.6rem 1.2rem;
+        .contact-submit {
+            padding: 12px 30px;
             border: none;
-            border-radius: .5rem;
-            font-size: 1rem;
+            border-radius: 6px;
+            background: #ae674e;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .send-btn:hover {
-            background-color: #a7766a;
+            width: 100%;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 767.98px) {
-            .contact-info-item {
-                font-size: 0.9rem;
-            }
-            .contact-header {
-                font-size: 1.6rem;
+        .contact-submit:hover {
+            background: #8f523d;
+        }
 
+        @media (max-width: 768px) {
+            .contact-row {
+                flex-direction: column;
             }
         }
     </style>
-@endsection
 
-@section('content')
-    <div class="d-flex justify-content-center align-items-center min-vh-100 p-3">
-        <div class="w-100" style="max-width: 36rem;">
-            <div class="bg-white rounded-3 shadow-sm">
+    <div class="contact-container">
+        <h1 class="contact-title">Get in Touch With Us</h1>
 
-                <!-- Header -->
-                <div class="bg-contact-header p-5 text-center">
-                    <h1 class="contact-header">Contact Us</h1>
-                    <p class="contact-subtitle mt-2">Let us help you with your queries and ideas!</p>
-                </div>
+        <div class="contact-row">
 
-                <!-- Body -->
-                <div class="p-4">
-                    <div class="row g-4">
-                        <!-- Contact Info -->
-                        <div class="col-md-6">
-                            <div class="bg-light p-4 rounded-3 h-100">
-                                <h2 class="section-title mb-4" style="color:#b88f7f;">Get in Touch</h2>
+            <div class="contact-info">
+                <p><i class="fas fa-phone"></i> +1 (123) 456-7890</p>
+                <p><i class="fas fa-envelope"></i> info@celebration.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> 456 Avenue Road, Cityville, USA</p>
+            </div>
 
-                                <div class="contact-info-item">
-                                    <i class="fas fa-phone contact-icon"></i>
-                                    <span>+1 (123) 456-7890</span>
-                                </div>
 
-                                <div class="contact-info-item">
-                                    <i class="fas fa-envelope contact-icon"></i>
-                                    <span>info@celebration.com</span>
-                                </div>
+            <div class="contact-form">
+                {{-- Success Message --}}
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
 
-                                <div class="contact-info-item">
-                                    <i class="fas fa-map-marker-alt contact-icon"></i>
-                                    <span>456 Avenue Road,<br>Cityville, USA</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Contact Form -->
-                        <div class="col-md-6">
-                            <div class="bg-white p-4 rounded-3 h-100">
-                                <h2 class="section-title mb-4" style="color:#b88f7f;">Send Us a Message</h2>
-
-                                @if(session('success'))
-                                    <div class="alert alert-success mb-4">
-                                        {{ session('success') }}
-                                    </div>
-                                @endif
-
-                                <form method="POST" action="{{ route('contact.submit') }}">
-                                    @csrf
-                                    <div class="mb-3">
-                                        <input type="text" name="name" placeholder="Your Name" class="input-field" required />
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <input type="email" name="email" placeholder="Your Email" class="input-field" required />
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <textarea name="message" placeholder="Your Message" rows="4" class="input-field" required></textarea>
-                                    </div>
-
-                                    <button type="submit" class="send-btn">Send Message</button>
-                                </form>
-                            </div>
-                        </div>
+                {{-- Validation Errors --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                </div>
+                @endif
 
+                <form action="{{ route('contact.submit') }}" method="POST">
+                    @csrf
+                    <input type="text" name="name" placeholder="Your Name" value="{{ old('name') }}" required>
+                    <input type="email" name="email" placeholder="Your Email" value="{{ old('email') }}" required>
+                    <textarea name="message" placeholder="Your Message" rows="4" required>{{ old('message') }}</textarea>
+                    <button type="submit" class="contact-submit">Send Message</button>
+                </form>
             </div>
         </div>
     </div>

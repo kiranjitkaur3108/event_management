@@ -3,8 +3,14 @@
 @section('title', ucfirst($role) . ' Login')
 
 @section('content')
-
     <style>
+        /* === Page Background === */
+        body {
+            background-color: #f4e9dd;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* === Login Container === */
         .login-container {
             padding: 60px 20px;
             min-height: 80vh;
@@ -13,43 +19,53 @@
             align-items: center;
         }
 
-        /* Card styling */
+        /* === Card Styling (Feedback Page Style) === */
         .login-card {
             max-width: 500px;
             width: 100%;
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            padding: 30px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            padding: 35px;
             text-align: center;
         }
 
+        /* === Title === */
         .login-card h2 {
-            color: #6A3F3F;
-            margin-bottom: 20px;
+            color: #ae674e;
+            font-weight: bold;
+            margin-bottom: 25px;
         }
 
+        /* === Labels === */
         .login-card label {
-            font-weight: bold;
-            color: #6A3F3F;
+            font-weight: 600;
+            color: #ae674e;
             text-align: left;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
+        /* === Input Fields === */
         .login-card .form-control {
             margin-bottom: 15px;
             padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+            border-radius: 6px;
+            border: 1px solid #d8c1b4;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s;
         }
 
-        /* Unified button style */
-        .login-card .btn-uniform {
-            background-color: #6A3F3F;
+        .login-card .form-control:focus {
+            border-color: #ae674e;
+            box-shadow: 0 0 5px rgba(174, 103, 78, 0.4);
+        }
+
+        /* === Buttons (Feedback Page Style) === */
+        .btn-uniform {
+            background-color: #ae674e;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             padding: 12px;
             font-weight: bold;
             cursor: pointer;
@@ -61,14 +77,15 @@
             text-align: center;
         }
 
-        .login-card .btn-uniform:hover {
-            background-color: #8A5C5C;
+        .btn-uniform:hover {
+            background-color: #8f523d;
             color: #fff;
         }
 
+        /* === Responsive === */
         @media (max-width: 576px) {
             .login-card {
-                padding: 20px;
+                padding: 25px;
             }
         }
     </style>
@@ -97,14 +114,11 @@
                     <input type="password" name="password" class="form-control" required>
                 </div>
 
-                <!-- Login button -->
                 <button type="submit" class="btn-uniform">Login</button>
             </form>
 
-            <!-- Links styled as buttons -->
             <a href="{{ route('role.select') }}" class="btn-uniform">← Back to Role Selection</a>
             <a href="{{ route('register') }}" class="btn-uniform">Register here</a>
         </div>
     </div>
-
 @endsection

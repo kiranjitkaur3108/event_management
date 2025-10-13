@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AboutController;
+use App\Http\Controllers\Auth\LogoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +20,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
-//for feedback:
+//For Feedback:
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
 Route::post('/feedback', [FeedbackController::class, 'submit'])->name('feedback.submit');
 Route::get('/thank-you', [FeedbackController::class, 'thankYou'])->name('feedback.thankyou');
-
+//For logout functionality:
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 /*
 |--------------------------------------------------------------------------
 | Role Selection Page
@@ -52,21 +55,35 @@ Route::get('/login', function (Request $request) {
 Route::post('/login', function (Request $request) {
     $email = $request->input('email');
     $password = $request->input('password');
-      $user = User::where('email', $email)->first();
 
- if (!$user || !Hash::check($password, $user->password)) {
-        return back()->with('error', 'Invalid credentials.');
+    // === STATIC CREDENTIALS  ===
+    $adminCred = ['email' => 'admin@gmail.com', 'password' => 'admin123'];
+    $userCred  = ['email' => 'user@gmail.com',  'password' => 'user123'];
+
+    // Admin login
+    if ($email === $adminCred['email'] && $password === $adminCred['password']) {
+        session([
+            'role' => 'admin',
+            'user_id' => 1,
+            'user_name' => 'Admin'
+        ]);
+        return redirect('/admin/dashboard');
     }
 
-    // Check if admin
-    if ($user->is_admin == 1) {
-        session(['role' => 'admin', 'user_id' => $user->id]);
-        return redirect('/admin/dashboard');
-    } else {
-        session(['role' => 'user', 'user_id' => $user->id]);
+    // Regular user login
+    if ($email === $userCred['email'] && $password === $userCred['password']) {
+        session([
+            'role' => 'user',
+            'user_id' => 2,
+            'user_name' => 'User'
+        ]);
         return redirect('/home');
     }
+
+    // Invalid credentials
+    return back()->with('error', 'Invalid credentials.');
 })->name('login.submit');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -90,9 +107,9 @@ Route::get('/admin/dashboard', function () {
     $userCount = 12;
     $postCount = 34;
     $recentLogins = [
-        ['name' => 'Sara K.', 'when' => '2025-10-01'],
-        ['name' => 'Ali P.',  'when' => '2025-10-02'],
-        ['name' => 'Maya R.', 'when' => '2025-10-05'],
+        ['name' => 'Sarita Rani', 'when' => '2025-10-01'],
+        ['name' => 'Sonali',  'when' => '2025-10-02'],
+        ['name' => 'Bhakti', 'when' => '2025-10-05'],
     ];
 
     return view('admin.dashboard', compact('userCount', 'postCount', 'recentLogins'));
@@ -123,3 +140,32 @@ Route::get('/home', function () {
     }
     return view('home');
 })->name('user.home');
+
+
+
+/*
+|--------------------------------------------------------------------------
+| services
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/services', function () {
+    return view('services');
+})->name('services');
+
+
+/*
+|--------------------------------------------------------------------------
+| contact
+|--------------------------------------------------------------------------
+*/
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+
+/*
+|--------------------------------------------------------------------------
+| about
+|--------------------------------------------------------------------------
+*/
+Route::get('/about', [AboutController::class, 'show'])->name('about');
