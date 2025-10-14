@@ -31,7 +31,7 @@
             <a href="{{ url('/services') }}" class="text-light text-decoration-none mx-2">Services</a>
             <a href="{{ url('gallery') }}" class="text-light text-decoration-none mx-2">Gallery</a>
             <a href="{{ url('contact') }}" class="text-light text-decoration-none mx-2">Contact</a>
-            <a href="{{ url('feedback') }}" class="text-light text-decoration-none mx-2">Feedback</a>
+            <a href="{{ url('reviews') }}" class="text-light text-decoration-none mx-2">Feedback</a>
         </div>
 
         <div class="mb-3">

@@ -37,7 +37,7 @@
 
 
             <!-- Call-to-Action Button -->
-            <a href="{{ url('/contact') }}"
+            <a href="{{ url('/services') }}"
                class="btn btn-outline-primary"
                style="background-color: #fffbf8; color: #AE674E; border-color: #AE674E;
                   padding: 0.5rem 1.5rem; font-weight: 600; text-transform: uppercase; border-radius: 10px;">

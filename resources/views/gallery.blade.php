@@ -1,5 +1,3 @@
-resources/views/gallery.blade.php
-
 @extends('layouts.app')
 
 @section('title', 'Gallery | Celebrations')

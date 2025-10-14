@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\GalleryController;
+use App\Models\Feedback;
 
 
 /*
@@ -159,6 +160,12 @@ Route::get('/home', function () {
 Route::get('/services', function () {
     return view('services');
 })->name('services');
+
+//Reviews Route
+Route::get('/reviews', function () {
+    $reviews = Feedback::latest()->get(); // fetch all feedback
+    return view('reviews', compact('reviews'));
+})->name('reviews');
 
 
 /*

@@ -54,6 +54,33 @@
             font-size: 15px;
         }
 
+        .feedback-rating {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+
+        /*.feedback-rating label {*/
+        /*    font-size: 20px;*/
+        /*    font-weight: bold;*/
+        /*    white-space: nowrap;*/
+        /*    color: #ae674e;*/
+        /*}*/
+
+        .feedback-rating select {
+            padding: 8px;
+            border: 1px solid #b5b5b5;
+            border-radius: 6px;
+            color: #555;
+            background-color: #f8f8f8;
+            font-weight: normal;
+            width: 630px;
+            cursor: pointer;
+        }
+
         .feedback-submit {
             margin-top: 25px;
             padding: 12px 30px;
@@ -95,7 +122,17 @@
             @csrf
 
             <textarea name="message" class="feedback-textarea" placeholder="Your feedback..." required autofocus>{{ old('message') }}</textarea>
-
+            <div class="feedback-rating">
+{{--                <label>Ratings:</label>--}}
+                <select name="rating" required>
+                    <option value="" disabled hidden {{ old('rating') ? '' : 'selected' }}>Select Rating</option>
+                    <option value="5" {{ old('rating') == 5 ? 'selected' : '' }}>⭐⭐⭐⭐⭐</option>
+                    <option value="4" {{ old('rating') == 4 ? 'selected' : '' }}>⭐⭐⭐⭐</option>
+                    <option value="3" {{ old('rating') == 3 ? 'selected' : '' }}>⭐⭐⭐</option>
+                    <option value="2" {{ old('rating') == 2 ? 'selected' : '' }}>⭐⭐</option>
+                    <option value="1" {{ old('rating') == 1 ? 'selected' : '' }}>⭐</option>
+                </select>
+            </div>
             <div class="feedback-inputs">
                 <input type="text" name="name" class="feedback-name" placeholder="Name" value="{{ old('name') }}" required>
                 <input type="email" name="email" class="feedback-email" placeholder="Email" value="{{ old('email') }}" required>
