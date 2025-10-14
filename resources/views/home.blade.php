@@ -4,10 +4,9 @@
 
 @section('content')
     <style>
-        /*body, section, h1, h2, h3, p, a, div {*/
-        /*    font-family: Garamond, serif;*/
-
-        /*}*/
+        body {
+            background-color: #f4e9dd;
+        }
         .hero-subtitle {
             font-size: 1.75rem;
             color: #6A3F3F;

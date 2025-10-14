@@ -10,6 +10,8 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\GalleryController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +26,13 @@ Route::post('/contact', [ContactController::class, 'submit'])->name('contact.sub
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
 Route::post('/feedback', [FeedbackController::class, 'submit'])->name('feedback.submit');
 Route::get('/thank-you', [FeedbackController::class, 'thankYou'])->name('feedback.thankyou');
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
 //For logout functionality:
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+// booking route
+Route::get('/book', function () {
+    return view('book');
+})->name('book');
 /*
 |--------------------------------------------------------------------------
 | Role Selection Page
