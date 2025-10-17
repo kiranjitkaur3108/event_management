@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
@@ -9,7 +10,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AuthController;
 use App\Models\Feedback;
 use App\Models\User;
-
+use App\Http\Controllers\BookingController;
 /*
 |--------------------------------------------------------------------------
 | Public Pages
@@ -30,6 +31,7 @@ Route::get('/reviews', function() {
 })->name('reviews');
 Route::get('/book', function() { return view('book'); })->name('book');
 
+
 /*
 |--------------------------------------------------------------------------
 | Auth Routes
@@ -39,8 +41,10 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -52,9 +56,11 @@ Route::get('/admin/dashboard', function() {
         return redirect()->route('login')->with('error', 'Please login as admin.');
     }
 
+
     $users = User::all(); // includes admin and registered users
     return view('admin.dashboard', compact('users'));
 })->name('admin.dashboard');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -67,3 +73,59 @@ Route::get('/home', function() {
     }
     return view('home');
 })->name('user.home');
+
+
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| services
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/services', function () {
+    return view('services');
+})->name('services');
+
+//Reviews Route
+Route::get('/reviews', function () {
+    $reviews = Feedback::latest()->get(); // fetch all feedback
+    return view('reviews', compact('reviews'));
+})->name('reviews');
+
+
+/*
+|--------------------------------------------------------------------------
+| contact
+|--------------------------------------------------------------------------
+*/
+Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+
+/*
+|--------------------------------------------------------------------------
+| about
+|--------------------------------------------------------------------------
+*/
+Route::get('/about', [AboutController::class, 'show'])->name('about');
+
+// Booking Routes
+Route::middleware('auth')->group(function () {
+    // Show booking form
+    Route::get('/book', [BookingController::class, 'show'])->name('book.show');
+
+    // Handle booking submission
+    Route::post('/book', [BookingController::class, 'store'])->name('book.submit');
+
+    // User view their bookings
+    Route::get('/my-bookings', [BookingController::class, 'userBookings'])->name('user.bookings');
+
+    Route::get('/book/details', [BookingController::class, 'showBookingForm'])->name('book.details');
+
+});
+
+// Admin view all bookings
+Route::get('/admin/bookings', [BookingController::class, 'adminBookings'])->name('admin.bookings');

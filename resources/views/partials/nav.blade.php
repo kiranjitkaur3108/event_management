@@ -4,18 +4,22 @@
         color: rgba(255, 255, 255, 0.7) !important;
     }
 
+
     #main-navbar .nav-link:hover {
         color: #ffffff !important;
     }
+
 
     #main-navbar .nav-link.active {
         color: #ffffff !important;
     }
 
+
     #main-navbar .navbar-brand {
         color: #ffffff !important;
     }
 </style>
+
 
 <!-- Navbar -->
 <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: #ae674e;">
@@ -25,9 +29,11 @@
             <i class="fas fa-user"></i> {{ Auth::check() ? Auth::user()->name : 'Login' }}
         </a>
 
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
         </button>
+
 
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto fw-bold">
@@ -46,6 +52,7 @@
                 <li class="nav-item">
                     <a href="{{ route('contact.show') }}" class="nav-link {{ request()->routeIs('contact.show') ? 'active' : '' }}">Contact</a>
                 </li>
+
 
                 @if(Auth::check())
                 <li class="nav-item">

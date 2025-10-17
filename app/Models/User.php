@@ -1,15 +1,19 @@
 <?php
 
+
 namespace App\Models;
+
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +26,7 @@ class User extends Authenticatable
         'role',
     ];
 
+
     /**
      * The attributes that should be hidden for arrays.
      */
@@ -30,12 +35,14 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
     /**
      * The attributes that should be cast to native types.
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
 
     /**
      * Mutator to automatically hash passwords when creating/updating.
@@ -45,6 +52,7 @@ class User extends Authenticatable
         $this->attributes['password'] = Hash::make($value);
     }
 
+
     /**
      * Check if the user is admin
      */
@@ -53,6 +61,7 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+
     /**
      * Check if the user is regular user
      */
@@ -60,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->role === 'user';
     }
+    public function bookings()
+{
+    return $this->hasMany(Booking::class);
+}
+
 }
