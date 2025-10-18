@@ -23,7 +23,7 @@
     <div class="container">
         @if(session('role') || Auth::check())
             {{-- Logged in (either session or Auth) --}}
-            <a class="navbar-brand fw-bold" href="#">
+            <a class="navbar-brand fw-bold" href="admin/dashboard">
                 <i class="fas fa-user"></i> {{ session('user_name') ?? Auth::user()->name ?? 'Account' }}
             </a>
         @else

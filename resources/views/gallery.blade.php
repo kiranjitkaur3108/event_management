@@ -8,32 +8,20 @@
 
         <!-- Gallery Grid -->
         <div class="row g-4">
-            @php
-                $images = [
-                    ['file' => 'pexels-fu-zhichao-176355-587741.jpg', 'event' => 'Product Launch Event'],
-                    ['file' => 'pexels-cottonbro-3171837.jpg', 'event' => 'Anniversary Celebration'],
-                    ['file' => 'pexels-roneferreira-2735037.jpg', 'event' => 'Holiday Party'],
-                    ['file' => 'pexels-sebastian-ervi-866902-1763075.jpg', 'event' => 'Music Concert'],
-                    ['file' => 'wedding-ceremony.jpg', 'event' => 'Wedding Ceremony'],
-                    ['file' => 'pexels-silvia-trigo-545701-1857157.jpg', 'event' => 'Outdoor Festival'],
-                    ['file' => 'gallery-birthday.jpg', 'event' => 'Birthday Party'],
-                    ['file' => 'pexels-pavel-danilyuk-6405771.jpg', 'event' => 'Private Party'],
-                ];
-            @endphp
-
             @foreach($images as $img)
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="gallery-item rounded shadow-sm overflow-hidden position-relative">
                         <div class="ratio ratio-1x1"
-                             style="background: url('{{ asset('images/' . $img['file']) }}') center/cover no-repeat; transition: transform 0.3s ease;">
+                             style="background: url('{{ asset($img->image_path) }}') center/cover no-repeat; transition: transform 0.3s ease;">
                         </div>
                         <div class="overlay-text d-flex align-items-center justify-content-center">
-                            <span>{{ $img['event'] }}</span>
+                            <span>{{ $img->event_name }}</span>
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
+
     </section>
 
     <style>
