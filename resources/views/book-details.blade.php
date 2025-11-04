@@ -49,19 +49,32 @@
     button:hover {
         background-color: #8e513d;
     }
+    .error-message {
+        color: red;
+        font-size: 13px;
+        margin-top: 5px;
+        display: block;
+    }
+    .input-error {
+        border-color: red;
+        background-color: #ffeaea;
+    }
 </style>
 
 <div class="form-container">
     <h2>Complete Your Booking</h2>
 
-    <form action="{{ route('book.submit') }}" method="POST">
+
+    <form action="{{ route('book.submit') }}" method="POST" id="bookingForm">
         @csrf
         <input type="hidden" name="service_name" value="{{ $serviceName }}">
         <input type="hidden" name="charges" value="{{ $charges }}">
 
+      
         <div class="form-group">
             <label>Event Date:</label>
-            <input type="date" name="event_date" required>
+            <input type="date" name="event_date" id="event_date" required onkeydown="return false;">
+            <span class="error-message"></span>
         </div>
 
         <div class="form-group">
@@ -90,4 +103,78 @@
         <button type="submit">Confirm Booking</button>
     </form>
 </div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("bookingForm");
+    const guestInput = document.querySelector("input[name='guest_count']");
+    const dateInput = document.getElementById("event_date");
+
+    // Set min date to tomorrow
+    const today = new Date();
+    today.setDate(today.getDate() + 1);
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const dd = String(today.getDate()).padStart(2, "0");
+    const minDate = `${yyyy}-${mm}-${dd}`;
+    dateInput.setAttribute("min", minDate);
+
+    // Prevent selecting past/today’s date
+    dateInput.addEventListener("change", function () {
+        const selected = new Date(this.value);
+        const min = new Date(minDate);
+
+        if (selected < min) {
+            showError(dateInput, "You cannot select a past or today's date.");
+            this.value = "";
+        } else {
+            clearError(dateInput);
+        }
+    });
+
+    function showError(input, message) {
+        let error = input.parentNode.querySelector(".error-message");
+        if (!error) {
+            error = document.createElement("span");
+            error.className = "error-message";
+            input.parentNode.appendChild(error);
+        }
+        error.textContent = message;
+        input.classList.add("input-error");
+    }
+
+    function clearError(input) {
+        const error = input.parentNode.querySelector(".error-message");
+        if (error) error.textContent = "";
+        input.classList.remove("input-error");
+    }
+
+    form.addEventListener("submit", function (e) {
+        let valid = true;
+        const guests = parseInt(guestInput.value, 10);
+        const selected = new Date(dateInput.value);
+        const min = new Date(minDate);
+
+        clearError(guestInput);
+        clearError(dateInput);
+
+        if (isNaN(guests) || guests <= 0) {
+            showError(guestInput, "Guest count must be at least 1.");
+            valid = false;
+        }
+
+        if (!dateInput.value) {
+            showError(dateInput, "Please select an event date.");
+            valid = false;
+        } else if (selected < min) {
+            showError(dateInput, "Please choose a date after today.");
+            valid = false;
+        }
+
+        if (!valid) e.preventDefault();
+    });
+});
+</script>
+
 @endsection
