@@ -14,6 +14,11 @@ use App\Models\Feedback;
 use App\Models\User;
 use App\Models\Booking;
 
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationMail;
+
+
 /*
 |--------------------------------------------------------------------------
 | Public Pages

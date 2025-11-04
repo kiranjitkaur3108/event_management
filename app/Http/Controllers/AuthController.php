@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationMail;
 
 
 class AuthController extends Controller
@@ -33,9 +35,15 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
             'role' => 'user',
         ]);
+
+        // Send Mailtrap email
+        Mail::to($user->email)->send(new RegistrationMail($user));
+
+        // Log user in
+        Auth::login($user);
 
 
         // Log the user in

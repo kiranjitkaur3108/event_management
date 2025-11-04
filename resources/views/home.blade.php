@@ -5,7 +5,7 @@
 @section('content')
     <style>
         body {
-            background-color: #f4e9dd;
+            background-color: #fce3f1ff;
         }
         .hero-subtitle {
             font-size: 1.75rem;

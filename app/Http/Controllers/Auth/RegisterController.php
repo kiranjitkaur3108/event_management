@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationMail;
+use App\Models\User;
+
 
 class RegisterController extends Controller
 {
@@ -15,24 +20,28 @@ class RegisterController extends Controller
 
     // Handle registration form submission
     public function register(Request $request)
-    {
-        // Basic validation
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+{
+    // Validate inputs
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|string|min:6|confirmed',
+    ]);
 
-        // Storing user info in session (temporary)
-        session([
-            'role' => 'user',
-            'user' => [
-                'name' => $request->name,
-                'email' => $request->email,
-            ],
-        ]);
+    // Create user in database
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+    ]);
 
-        // Redirect to home with success message
-        return redirect('/home')->with('success', 'Registration successful. Welcome!');
-    }
+    // Send registration email
+    Mail::to($user->email)->send(new RegistrationMail($user));
+
+    // Optionally log the user in:
+    // Auth::login($user);
+
+    return redirect('/home')->with('success', 'Registration successful! A confirmation email has been sent.');
+}
+
 }
