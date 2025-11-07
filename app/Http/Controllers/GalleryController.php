@@ -8,11 +8,16 @@ use App\Models\Gallery;
 
 class GalleryController extends Controller
 {
+    // GalleryController.php
     public function index()
     {
-        $images = Gallery::all(); // Fetch all images from DB
-        return view('gallery', compact('images')); // Pass $images to blade
+        // Group all gallery images by event name
+        $groupedImages = Gallery::all()->groupBy('event_name');
+
+        // Pass grouped data to Blade
+        return view('gallery', compact('groupedImages'));
     }
+
 
 
 }

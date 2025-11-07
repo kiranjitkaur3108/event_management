@@ -21,8 +21,26 @@ class GallerySeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'event_name' => 'Wedding Celebration',
+                'image_path' => 'images/anniversary.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'event_name' => 'Wedding Celebration',
+                'image_path' => 'images/destination-wedding.avif',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'event_name' => 'Birthday Party',
                 'image_path' => 'images/gallery-birthday.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'event_name' => 'Birthday Party',
+                'image_path' => 'images/pexels-vlada-karpovich-7099924.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -33,7 +51,13 @@ class GallerySeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'event_name' => 'Outdoor Festival',
+                'event_name' => 'Corporate Event',
+                'image_path' => 'images/pexels-pavel-danilyuk-6405771.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'event_name' => 'Birthday Party',
                 'image_path' => 'images/pexels-silvia-trigo-545701-1857157.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -45,13 +69,19 @@ class GallerySeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'event_name' => 'Holiday Party',
+                'event_name' => 'Festival',
+                'image_path' => 'images/gallery-newyear.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'event_name' => 'Music Concert',
                 'image_path' => 'images/pexels-roneferreira-2735037.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'event_name' => 'Product Launch Event',
+                'event_name' => 'Birthday Party',
                 'image_path' => 'images/pexels-fu-zhichao-176355-587741.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
