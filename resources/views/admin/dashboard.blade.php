@@ -128,8 +128,10 @@
                             <form action="{{ route('admin.booking.delete', $booking->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm text-white" style="background:#aaa;" onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
+                                <button type="submit" class="btn btn-sm text-white" style="background:#aaa;"
+                                    onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
                             </form>
+
                         </td>
                     </tr>
                     @empty

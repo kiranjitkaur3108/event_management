@@ -16,12 +16,10 @@ class BookingController extends Controller
         return view('book', compact('services'));
     }
 
-    // Add your new method HERE (inside the class, before the final } )
     public function showBookingForm(Request $request)
     {
         $serviceName = $request->input('service_name');
         $charges = $request->input('charges');
-
         return view('book-details', compact('serviceName', 'charges'));
     }
 
@@ -56,7 +54,7 @@ class BookingController extends Controller
             ->with('success', 'Your booking has been placed successfully!');
     }
 
-    // User can view their bookings
+    // User bookings
     public function userBookings()
     {
         $bookings = Booking::with('service')
@@ -67,7 +65,7 @@ class BookingController extends Controller
         return view('bookings', compact('bookings'));
     }
 
-    // Admin can view all bookings
+    // Admin bookings view
     public function adminBookings()
     {
         if (!Auth::check() || Auth::user()->role !== 'admin') {
@@ -77,4 +75,27 @@ class BookingController extends Controller
         $bookings = Booking::with(['user', 'service'])->latest()->get();
         return view('admin.bookings', compact('bookings'));
     }
-} 
+
+    // ✅ Admin: Edit booking
+    public function edit($id)
+    {
+        $booking = Booking::with('service')->findOrFail($id);
+        return view('admin.edit_booking', compact('booking'));
+    }
+
+    // ✅ Admin: Update booking
+    public function update(Request $request, $id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->update($request->only(['event_date', 'status', 'venue', 'guest_count']));
+        return redirect()->route('admin.bookings')->with('success', 'Booking updated successfully');
+    }
+
+    // ✅ Admin: Delete booking
+    public function destroy($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+        return redirect()->route('admin.bookings')->with('success', 'Booking deleted successfully');
+    }
+}
