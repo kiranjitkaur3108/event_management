@@ -1,37 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Mail;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 
-class RegisterController extends Controller
+class RegistrationMail extends Mailable
 {
-    public function showRegistrationForm()
+    use Queueable, SerializesModels;
+
+    public $user;
+
+    /**
+     * Create a new message instance.
+     */
+    public function __construct(User $user)
     {
-        return view('register');
+        $this->user = $user;
     }
 
-    public function register(Request $request)
+    /**
+     * Build the message.
+     */
+    public function build()
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'user', // default
-        ]);
-
-        Auth::login($user);
-
-        return redirect()->route('user.home')->with('success', 'Registration successful!');
+        return $this->subject('Welcome to TechCore!')
+                    ->view('emails.registration');
     }
 }

@@ -6,63 +6,93 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationMail;
 
 class AuthController extends Controller
 {
+    // Show registration form
+    public function showRegister()
+    {
+        return view('register');
+    }
+
+    // Handle registration
+    public function register(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $profileImageName = null;
+
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $profileImageName = time() . '_' . $image->getClientOriginalName();
+            $image->storeAs('profile_images', $profileImageName, 'public');
+        }
+
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']), // important!
+            'role' => 'user',
+            'profile_image' => $profileImageName,
+        ]);
+
+        // Send welcome/registration email
+        Mail::to($user->email)->send(new RegistrationMail($user));
+
+        Auth::login($user);
+
+        return redirect()->route('home')->with('success', 'Registration successful! A confirmation email has been sent.');
+    }
+
     // Show login form
     public function showLogin()
     {
-        // Make sure this matches your file structure
-        return view('login'); 
+        return view('login');
     }
 
     // Handle login
     public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+{
+    // Validate input
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+        'role' => 'required',
+    ]);
 
-        $email = $request->email;
-        $password = $request->password;
+    $credentials = $request->only('email', 'password');
 
-        // Fetch user by email
-        $user = User::where('email', $email)->first();
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
 
-        if (!$user) {
-            return back()->with('error', 'Invalid email or password.');
+        // check role manually
+        if ($user->role !== $request->role) {
+            Auth::logout();
+            return back()->withErrors(['role' => 'Selected role does not match.'])->withInput();
         }
 
-        // Verify password
-        if (!Hash::check($password, $user->password)) {
-            return back()->with('error', 'Invalid email or password.');
-        }
-
-        // Log the user in
-        Auth::login($user);
         $request->session()->regenerate();
-
-        // Redirect based on role
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard')->with('success', 'Admin login successful!');
-        }
-
-        return redirect()->route('user.bookings')->with('success', 'Login successful!');
+        return redirect()->route('home')->with('success', 'Logged in successfully!');
     }
 
-    // Show registration form
-    public function showRegister()
-    {
-        return view('register'); // matches resources/views/register.blade.php
-    }
+    return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
+}
 
-    // Handle logout
+
+    // Logout
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('home')->with('success', 'Logged out successfully.');
+
+        return redirect()->route('login')->with('success', 'You have been logged out.');
     }
 }
