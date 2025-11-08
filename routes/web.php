@@ -10,9 +10,11 @@ use App\Http\Controllers\{
     AboutController,
     AuthController,
     BookingController,
-    ServiceController
+    ServiceController,
 };
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ContactController as AdminContactController;
+
 use App\Models\{Feedback, User, Booking};
 
 /*
@@ -87,6 +89,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 */
 Route::prefix('admin')->middleware(['auth'])->group(function () {
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Users
@@ -96,12 +99,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     })->name('admin.users');
 
     Route::get('/user/{id}/edit', fn($id) => view('admin.edit_user', ['user' => User::findOrFail($id)]))->name('admin.user.edit');
-
     Route::put('/user/{id}', function(Request $request, $id) {
         User::findOrFail($id)->update($request->only(['name','email','role']));
         return redirect()->route('admin.users')->with('success','User updated successfully.');
     })->name('admin.user.update');
-
     Route::delete('/user/{id}', function($id) {
         User::findOrFail($id)->delete();
         return redirect()->route('admin.users')->with('success','User deleted successfully.');
@@ -115,6 +116,15 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     // Feedback
     Route::get('/feedback', fn() => view('admin.feedback',['feedbacks'=>Feedback::latest()->get()]))->name('admin.feedback');
+
+    // Contacts
+    Route::get('/contacts', [ContactController::class,'index'])->name('admin.contacts');
+
+
+Route::post('/admin/contact/{contact}/reply', [ContactController::class, 'reply'])
+    ->middleware(['auth']) // optionally check if admin
+    ->name('admin.contact.reply');
+
 });
 
 /*
@@ -123,6 +133,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
+
     Route::get('/home', function () {
         return auth()->user()->role === 'admin'
             ? redirect()->route('admin.dashboard')

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Booking;
 use App\Models\Service;
 use Carbon\Carbon;
+use App\Models\Contact; 
 
 class DashboardController extends Controller
 {
@@ -44,13 +45,16 @@ class DashboardController extends Controller
             return $booking->service->price ?? 0;
         });
 
+        $latestContacts = Contact::latest()->take(5)->get();
+
         return view('admin.dashboard', compact(
             'userCount',
             'doneEventCount',
             'upcomingEvents',
             'latestUsers',
             'latestBookings',
-            'totalRevenue'
+            'totalRevenue',
+            'latestContacts'
         ));
     }
 }
