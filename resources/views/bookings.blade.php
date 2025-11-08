@@ -92,7 +92,6 @@
         <table>
             <thead>
                 <tr>
-                    <th>Service</th>
                     <th>Event Date</th>
                     <th>Venue</th>
                     <th>Guests</th>
@@ -103,7 +102,6 @@
             <tbody>
                 @foreach ($bookings as $booking)
                     <tr>
-                        <td>{{ $booking->service->name ?? 'N/A' }}</td>
                         <td>{{ \Carbon\Carbon::parse($booking->event_date)->format('d M Y') }}</td>
                         <td>{{ $booking->venue }}</td>
                         <td>{{ $booking->guest_count ?? '—' }}</td>

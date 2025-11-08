@@ -24,19 +24,26 @@
 <!-- Navbar -->
 <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background-color: #ae674e;">
     <div class="container">
-        <!-- User/Login link -->
-        <a class="navbar-brand fw-bold"
-           href="{{
-        Auth::check()
-            ? (Auth::user()->role === 'admin'
-                ? url('admin/dashboard')
-                : url('my-bookings')
-              )
-            : route('login')
-      }}">
-            <i class="fas fa-user"></i>
-            {{ Auth::check() ? Auth::user()->name : 'Login' }}
+   <!-- User/Login link -->
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2"
+           href="{{ Auth::check() ? (Auth::user()->role === 'admin' ? url('admin/dashboard') : url('my-bookings')) : route('login') }}">
+            @if(Auth::check())
+                @if(Auth::user()->profile_image)
+                    <img src="{{ asset('storage/profile_images/' . Auth::user()->profile_image) }}"
+                         alt="Profile"
+                         style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #fff;">
+                @else
+                    <i class="fas fa-user-circle fa-lg text-white"></i>
+                @endif
+                <span>{{ Auth::user()->name }}</span>
+            @else
+                <i class="fas fa-user"></i>
+                <span>Login</span>
+            @endif
         </a>
+
+      
+
 
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
@@ -62,16 +69,19 @@
                     <a href="{{ route('contact.show') }}" class="nav-link {{ request()->routeIs('contact.show') ? 'active' : '' }}">Contact</a>
                 </li>
 
+               
+
+
 
                 @if(Auth::check())
-                    <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="nav-link btn btn-link text-white" style="text-decoration:none;">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
+                <li class="nav-item">
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="nav-link btn btn-link text-white" style="text-decoration:none;">
+                            Logout
+                        </button>
+                    </form>
+                </li>
                 @endif
             </ul>
         </div>

@@ -18,7 +18,6 @@
                 <div class="card-body text-center">
                     <h6 class="text-muted mb-1">Total Users</h6>
                     <h3 class="fw-bold mb-2">{{ $userCount ?? 0 }}</h3>
-                    <!-- <a href="{{ route('admin.users') }}" class="btn btn-sm text-white" style="background:#ae674e;">Manage Users</a> -->
                 </div>
             </div>
         </div>
@@ -29,7 +28,6 @@
                 <div class="card-body text-center">
                     <h6 class="text-muted mb-1">Done Events</h6>
                     <h3 class="fw-bold mb-2">{{ $doneEventCount ?? 0 }}</h3>
-                    <!-- <a href="{{ route('admin.bookings') }}" class="btn btn-sm text-white" style="background:#ae674e;">View Done Events</a> -->
                 </div>
             </div>
         </div>
@@ -40,22 +38,19 @@
                 <div class="card-body text-center">
                     <h6 class="text-muted mb-1">Upcoming Events</h6>
                     <h3 class="fw-bold mb-2">{{ $upcomingEvents ?? 0 }}</h3>
-                    <!-- <a href="{{ route('admin.bookings') }}" class="btn btn-sm text-white" style="background:#ae674e;">View Upcoming</a> -->
                 </div>
             </div>
         </div>
 
-        <!-- Revenue Card -->
+        <!-- Total Revenue -->
         <div class="col-md-3 col-sm-6">
             <div class="card shadow-sm border-0">
                 <div class="card-body text-center">
                     <h6 class="text-muted mb-1">Total Revenue</h6>
-                    <h3 class="fw-bold mb-2">${{ number_format($totalRevenue, 2) }}</h3>
-                    <!-- <a href="{{ route('admin.bookings') }}" class="btn btn-sm text-white" style="background:#ae674e;">View Bookings</a> -->
+                    <h3 class="fw-bold mb-2">${{ number_format($totalRevenue ?? 0, 2) }}</h3>
                 </div>
             </div>
         </div>
-
     </div>
 
     {{-- LATEST USERS --}}
@@ -82,11 +77,11 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ ucfirst($user->role) }}</td>
                         <td>
-                            <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-sm text-white" style="background:#ae674e;">Edit</a>
-                            <form action="{{ route('admin.user.delete', $user->id) }}" method="POST" class="d-inline">
+                            <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-sm text-white mb-1" style="background:#ae674e;">Edit</a>
+                            <form action="{{ route('admin.user.delete', $user->id) }}" method="POST" class="d-inline mb-1">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm text-white" style="background:#aaa;" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                                <button type="submit" class="btn btn-sm text-white mb-1" style="background:#aaa;" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -112,6 +107,8 @@
                         <th>#</th>
                         <th>Service</th>
                         <th>Event Date</th>
+                        <th>Venue</th>
+                        <th>Guests</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -122,21 +119,29 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $booking->service->name ?? 'N/A' }}</td>
                         <td>{{ $booking->event_date }}</td>
-                        <td>{{ ucfirst($booking->status) }}</td>
+                        <td>{{ $booking->venue ?? 'N/A' }}</td>
+                        <td>{{ $booking->guest_count ?? 'N/A' }}</td>
                         <td>
-                            <a href="{{ route('admin.booking.edit', $booking->id) }}" class="btn btn-sm text-white" style="background:#ae674e;">Edit</a>
-                            <form action="{{ route('admin.booking.delete', $booking->id) }}" method="POST" class="d-inline">
+                            @if($booking->status == 'Pending')
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            @elseif($booking->status == 'Confirmed')
+                                <span class="badge bg-success">Confirmed</span>
+                            @else
+                                <span class="badge bg-secondary">{{ $booking->status }}</span>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('admin.booking.edit', $booking->id) }}" class="btn btn-sm text-white mb-1" style="background:#ae674e;">Edit</a>
+                            <form action="{{ route('admin.booking.delete', $booking->id) }}" method="POST" class="d-inline mb-1">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm text-white" style="background:#aaa;"
-                                    onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
+                                <button type="submit" class="btn btn-sm text-white mb-1" style="background:#aaa;" onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
                             </form>
-
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted py-3">No bookings available.</td>
+                        <td colspan="7" class="text-center text-muted py-3">No bookings available.</td>
                     </tr>
                     @endforelse
                 </tbody>

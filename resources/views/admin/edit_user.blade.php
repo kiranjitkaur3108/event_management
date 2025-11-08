@@ -20,27 +20,25 @@
                 @method('PUT')
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Name</label>
+                    <label class="form-label">Name</label>
                     <input type="text" name="name" value="{{ old('name', $user->name) }}" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Email</label>
+                    <label class="form-label">Email</label>
                     <input type="email" name="email" value="{{ old('email', $user->email) }}" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Role</label>
+                    <label class="form-label">Role</label>
                     <select name="role" class="form-select" required>
                         <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                         <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                     </select>
                 </div>
 
-                <div class="d-flex justify-content-end">
-                    <a href="{{ route('admin.users') }}" class="btn text-white me-2" style="background:#aaa;">Cancel</a>
-                    <button type="submit" class="btn text-white" style="background:#ae674e;">Update</button>
-                </div>
+                <button type="submit" class="btn btn-sm text-white" style="background:#ae674e;">Update User</button>
+                <a href="{{ route('admin.users') }}" class="btn btn-sm btn-secondary ms-2">Cancel</a>
             </form>
         </div>
     </div>

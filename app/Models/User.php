@@ -19,12 +19,14 @@ class User extends Authenticatable
      * The attributes that are mass assignable.
      * Include 'role' so we can store admin/user role.
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-    ];
+   protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'role',
+    'profile_image',
+];
+
 
 
     /**

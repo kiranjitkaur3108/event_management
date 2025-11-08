@@ -9,17 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    // Show booking form
+    // Show booking form (list all services)
     public function show()
     {
-        $services = Service::all();
+        $services = Service::all(); // fetch all services
         return view('book', compact('services'));
     }
 
-    public function showBookingForm(Request $request)
+    // Show booking details form (from service selection)
+    public function showBookingForm($serviceName, $charges)
     {
-        $serviceName = $request->input('service_name');
-        $charges = $request->input('charges');
+        // These come directly from route parameters
         return view('book-details', compact('serviceName', 'charges'));
     }
 
@@ -29,17 +29,20 @@ class BookingController extends Controller
         $request->validate([
             'service_name' => 'required|string',
             'charges' => 'required|numeric',
-            'event_date' => 'required|date',
+            'event_date' => 'required|date|after:today',
             'venue' => 'required|string|max:255',
             'guest_count' => 'required|integer|min:1',
-            'status' => 'required|string',
+            'special_requests' => 'nullable|string|max:1000',
+            'status' => 'required|string|in:Pending,Confirmed',
         ]);
 
+        // Get existing service or create new
         $service = Service::firstOrCreate(
             ['name' => $request->service_name],
             ['price' => $request->charges]
         );
 
+        // Create booking
         Booking::create([
             'user_id' => Auth::id(),
             'service_id' => $service->id,
@@ -54,7 +57,7 @@ class BookingController extends Controller
             ->with('success', 'Your booking has been placed successfully!');
     }
 
-    // User bookings
+    // Show bookings for logged-in user
     public function userBookings()
     {
         $bookings = Booking::with('service')
@@ -65,7 +68,7 @@ class BookingController extends Controller
         return view('bookings', compact('bookings'));
     }
 
-    // Admin bookings view
+    // Admin: view all bookings
     public function adminBookings()
     {
         if (!Auth::check() || Auth::user()->role !== 'admin') {
@@ -76,26 +79,43 @@ class BookingController extends Controller
         return view('admin.bookings', compact('bookings'));
     }
 
-    // ✅ Admin: Edit booking
+    // Admin: edit booking
     public function edit($id)
     {
         $booking = Booking::with('service')->findOrFail($id);
         return view('admin.edit_booking', compact('booking'));
     }
 
-    // ✅ Admin: Update booking
+    // Admin: update booking
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'event_date' => 'required|date|after:today',
+            'venue' => 'required|string|max:255',
+            'guest_count' => 'required|integer|min:1',
+            'status' => 'required|string|in:Pending,Confirmed',
+            'special_requests' => 'nullable|string|max:1000',
+        ]);
+
         $booking = Booking::findOrFail($id);
-        $booking->update($request->only(['event_date', 'status', 'venue', 'guest_count']));
-        return redirect()->route('admin.bookings')->with('success', 'Booking updated successfully');
+
+        $booking->update($request->only([
+            'event_date',
+            'venue',
+            'guest_count',
+            'status',
+            'special_requests'
+        ]));
+
+        return redirect()->route('admin.bookings')->with('success', 'Booking updated successfully!');
     }
 
-    // ✅ Admin: Delete booking
+    // Admin: delete booking
     public function destroy($id)
     {
         $booking = Booking::findOrFail($id);
         $booking->delete();
-        return redirect()->route('admin.bookings')->with('success', 'Booking deleted successfully');
+
+        return redirect()->route('admin.bookings')->with('success', 'Booking deleted successfully!');
     }
 }

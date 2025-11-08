@@ -52,6 +52,7 @@
             | Phone: +1 (123) 456-7890
         </p>
 
-        <a href="{{ url('book') }}" class="btn btn-outline-light btn-sm rounded-pill px-4">Book Now</a>
+        <a href="{{ route('services') }}" class="btn btn-outline-light btn-sm rounded-pill px-4">Book Now</a>
+
     </div>
 </footer>

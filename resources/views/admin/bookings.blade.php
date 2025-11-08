@@ -19,12 +19,14 @@
             <table class="table mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th style="width:5%;">#</th>
-                        <th style="width:20%;">User</th>
-                        <th style="width:20%;">Service</th>
-                        <th style="width:15%;">Event Date</th>
-                        <th style="width:10%;">Status</th>
-                        <th style="width:30%;">Actions</th>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Service</th>
+                        <th>Event Date</th>
+                        <th>Venue</th>
+                        <th>Guests</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,23 +36,33 @@
                         <td>{{ $booking->user->name ?? 'N/A' }}</td>
                         <td>{{ $booking->service->name ?? 'N/A' }}</td>
                         <td>{{ $booking->event_date }}</td>
-                        <td>{{ ucfirst($booking->status) }}</td>
+                        <td>{{ $booking->venue ?? 'N/A' }}</td>
+                        <td>{{ $booking->guest_count ?? 'N/A' }}</td>
+                        <td>
+                            @if($booking->status == 'Pending')
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            @elseif($booking->status == 'Confirmed')
+                                <span class="badge bg-success">Confirmed</span>
+                            @else
+                                <span class="badge bg-secondary">{{ $booking->status }}</span>
+                            @endif
+                        </td>
                         <td>
                             <!-- Edit Button -->
-                            <a href="{{ route('admin.booking.edit', $booking->id) }}" class="btn btn-sm text-white" style="background:#ae674e;">Edit</a>
+                            <a href="{{ route('admin.booking.edit', $booking->id) }}" class="btn btn-sm text-white mb-1" style="background:#ae674e;">Edit</a>
 
                             <!-- Delete Form -->
                             <form action="{{ route('admin.booking.delete', $booking->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm text-white" style="background:#aaa;"
+                                <button type="submit" class="btn btn-sm text-white mb-1" style="background:#aaa;"
                                     onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
                             </form>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted py-3">No bookings available.</td>
+                        <td colspan="8" class="text-center text-muted py-3">No bookings available.</td>
                     </tr>
                     @endforelse
                 </tbody>

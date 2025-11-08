@@ -1,5 +1,3 @@
-Gallery.blade
-
 @extends('layouts.app')
 
 @section('title', 'Gallery | Celebrations')

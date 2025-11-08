@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
-
 @section('title', 'Register | Celebrations')
-
 
 @section('content')
 <style>
@@ -11,7 +9,6 @@
         background-color: #f4e9dd;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
 
     /* === Main Section === */
     .registration-section {
@@ -24,7 +21,6 @@
         background-color: #ffffff;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
-
 
     /* === Left Panel === */
     .registration-left {
@@ -39,7 +35,6 @@
         border-radius: 10px 0 0 10px;
     }
 
-
     .registration-left h1 {
         font-family: 'Pacifico', cursive;
         font-size: 36px;
@@ -47,12 +42,10 @@
         color: #fff;
     }
 
-
     .registration-left p {
         font-size: 16px;
         color: #fff;
     }
-
 
     /* === Right Panel === */
     .registration-right {
@@ -62,7 +55,6 @@
         border-radius: 0 10px 10px 0;
     }
 
-
     .registration-right h2 {
         color: #ae674e;
         font-weight: bold;
@@ -70,20 +62,17 @@
         text-align: center;
     }
 
-
     /* === Form Styling === */
     .registration-right form {
         display: flex;
         flex-direction: column;
     }
 
-
     .registration-right form label {
         margin-bottom: 6px;
         font-weight: 600;
         color: #ae674e;
     }
-
 
     .registration-right form input {
         margin-bottom: 15px;
@@ -94,12 +83,10 @@
         transition: border-color 0.2s ease-in-out, box-shadow 0.2s;
     }
 
-
     .registration-right form input:focus {
         border-color: #ae674e;
         box-shadow: 0 0 5px rgba(174, 103, 78, 0.3);
     }
-
 
     /* === Buttons === */
     .registration-right form button {
@@ -114,21 +101,9 @@
         transition: background 0.3s ease;
     }
 
-
     .registration-right form button:hover {
         background-color: #8f523d;
     }
-
-
-    /* === Thank You Message === */
-    .thank-you-message {
-        display: none;
-        margin-top: 20px;
-        text-align: center;
-        color: #ae674e;
-        font-weight: bold;
-    }
-
 
     /* === Login Link === */
     .login-link {
@@ -138,26 +113,20 @@
         color: #5c4033;
     }
 
-
     .login-link a {
         color: #ae674e;
         text-decoration: underline;
         font-weight: 600;
     }
 
-
     .login-link a:hover {
         color: #8f523d;
     }
-
-
-
 
     @media (max-width: 768px) {
         .registration-section {
             flex-direction: column;
         }
-
 
         .registration-left,
         .registration-right {
@@ -166,33 +135,29 @@
     }
 </style>
 
-
 <div class="registration-section">
     <div class="registration-left">
         <h1><i class="fa-solid fa-gift"></i> Celebrations</h1>
         <p>Join us to create unforgettable moments! Fill out the form to get started.</p>
     </div>
 
-
     <div class="registration-right">
         <h2>Create Your Account</h2>
+
         @if (session('success'))
         <div class="alert alert-success" style="text-align:center; color:#ae674e; font-weight:bold; margin-bottom:15px;">
             {{ session('success') }}
         </div>
         @endif
 
-
-        <form method="POST" action="{{ route('register.submit') }}" id="registrationForm">
-
-
+        <form method="POST" action="{{ route('register.submit') }}" id="registrationForm" enctype="multipart/form-data">
             @csrf
+
             <label for="name">Name</label>
             <input type="text" id="name" name="name" placeholder="Your Name" required>
             @error('name')
             <span style="color:red;">{{ $message }}</span>
             @enderror
-
 
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="Your Email" required>
@@ -200,27 +165,25 @@
             <span style="color:red;">{{ $message }}</span>
             @enderror
 
-
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Your Password" required>
             @error('password')
             <span style="color:red;">{{ $message }}</span>
             @enderror
 
-
             <label for="password_confirmation">Confirm Password</label>
             <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required>
 
-
-
+            <!-- Profile Image Input -->
+            <div class="mb-3">
+                <label>Profile Picture</label>
+                <input type="file" name="profile_image" class="form-control" accept="image/*">
+            </div>
 
             <button type="submit">Register</button>
         </form>
 
-
         <p class="login-link">Already registered? <a href="{{ route('login') }}">Login here</a>.</p>
     </div>
 </div>
-
-
 @endsection

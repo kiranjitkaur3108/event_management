@@ -4,73 +4,35 @@
 
 @section('content')
 <style>
-    body {
-        background-color: #f4e9dd;
-    }
+    body { background-color: #f4e9dd; }
     .form-container {
-        max-width: 600px;
-        margin: 60px auto;
-        background: #fff;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        max-width: 600px; margin: 60px auto;
+        background: #fff; padding: 40px;
+        border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     }
-    .form-container h2 {
-        color: #ae674e;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    .form-group {
-        margin-bottom: 20px;
-    }
-    label {
-        display: block;
-        font-weight: bold;
-        color: #333;
-        margin-bottom: 8px;
-    }
-    input, select, textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 14px;
-    }
-    button {
-        background-color: #ae674e;
-        color: #fff;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 30px;
-        font-weight: bold;
-        width: 100%;
-        transition: background-color 0.3s ease;
-    }
-    button:hover {
-        background-color: #8e513d;
-    }
-    .error-message {
-        color: red;
-        font-size: 13px;
-        margin-top: 5px;
-        display: block;
-    }
-    .input-error {
-        border-color: red;
-        background-color: #ffeaea;
-    }
+    .form-container h2 { color: #ae674e; text-align: center; margin-bottom: 30px; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-weight: bold; color: #333; margin-bottom: 8px; }
+    input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+    button { background-color: #ae674e; color: #fff; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; width: 100%; transition: background-color 0.3s ease; }
+    button:hover { background-color: #8e513d; }
+    .error-message { color: red; font-size: 13px; margin-top: 5px; display: block; }
+    .input-error { border-color: red; background-color: #ffeaea; }
+    .service-info { margin-bottom: 30px; }
+    .service-info h3 { color: #ae674e; margin-bottom: 10px; }
 </style>
 
 <div class="form-container">
-    <h2>Complete Your Booking</h2>
-
+    <div class="service-info">
+        <h3>{{ $serviceName }}</h3>
+        <p><strong>Charges:</strong> ${{ number_format($charges, 2) }}</p>
+    </div>
 
     <form action="{{ route('book.submit') }}" method="POST" id="bookingForm">
         @csrf
         <input type="hidden" name="service_name" value="{{ $serviceName }}">
         <input type="hidden" name="charges" value="{{ $charges }}">
 
-      
         <div class="form-group">
             <label>Event Date:</label>
             <input type="date" name="event_date" id="event_date" required onkeydown="return false;">
@@ -104,7 +66,6 @@
     </form>
 </div>
 
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("bookingForm");
@@ -119,19 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const dd = String(today.getDate()).padStart(2, "0");
     const minDate = `${yyyy}-${mm}-${dd}`;
     dateInput.setAttribute("min", minDate);
-
-    // Prevent selecting past/today’s date
-    dateInput.addEventListener("change", function () {
-        const selected = new Date(this.value);
-        const min = new Date(minDate);
-
-        if (selected < min) {
-            showError(dateInput, "You cannot select a past or today's date.");
-            this.value = "";
-        } else {
-            clearError(dateInput);
-        }
-    });
 
     function showError(input, message) {
         let error = input.parentNode.querySelector(".error-message");
@@ -150,6 +98,13 @@ document.addEventListener("DOMContentLoaded", function () {
         input.classList.remove("input-error");
     }
 
+    dateInput.addEventListener("change", function () {
+        const selected = new Date(this.value);
+        const min = new Date(minDate);
+        if (selected < min) { showError(this, "You cannot select a past or today's date."); this.value = ""; } 
+        else { clearError(this); }
+    });
+
     form.addEventListener("submit", function (e) {
         let valid = true;
         const guests = parseInt(guestInput.value, 10);
@@ -159,22 +114,12 @@ document.addEventListener("DOMContentLoaded", function () {
         clearError(guestInput);
         clearError(dateInput);
 
-        if (isNaN(guests) || guests <= 0) {
-            showError(guestInput, "Guest count must be at least 1.");
-            valid = false;
-        }
-
-        if (!dateInput.value) {
-            showError(dateInput, "Please select an event date.");
-            valid = false;
-        } else if (selected < min) {
-            showError(dateInput, "Please choose a date after today.");
-            valid = false;
-        }
+        if (isNaN(guests) || guests <= 0) { showError(guestInput, "Guest count must be at least 1."); valid = false; }
+        if (!dateInput.value) { showError(dateInput, "Please select an event date."); valid = false; } 
+        else if (selected < min) { showError(dateInput, "Please choose a date after today."); valid = false; }
 
         if (!valid) e.preventDefault();
     });
 });
 </script>
-
 @endsection
