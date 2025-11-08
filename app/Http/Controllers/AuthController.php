@@ -36,9 +36,9 @@ class AuthController extends Controller
         }
 
         $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']), // important!
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password, // important!
             'role' => 'user',
             'profile_image' => $profileImageName,
         ]);
@@ -58,32 +58,67 @@ class AuthController extends Controller
     }
 
     // Handle login
-    public function login(Request $request)
-{
-    // Validate input
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-        'role' => 'required',
-    ]);
+//     public function login(Request $request)
+// {
+//     // Validate input
+//     $request->validate([
+//         'email' => 'required|email',
+//         'password' => 'required',
+//         'role' => 'required',
+//     ]);
 
-    $credentials = $request->only('email', 'password');
+//     $credentials = $request->only('email', 'password');
 
-    if (Auth::attempt($credentials)) {
-        $user = Auth::user();
+//     if (Auth::attempt($credentials)) {
+//         $user = Auth::user();
 
-        // check role manually
-        if ($user->role !== $request->role) {
-            Auth::logout();
-            return back()->withErrors(['role' => 'Selected role does not match.'])->withInput();
+//         // check role manually
+//         if ($user->role !== $request->role) {
+//             Auth::logout();
+//             return back()->withErrors(['role' => 'Selected role does not match.'])->withInput();
+//         }
+
+//         $request->session()->regenerate();
+//         return redirect()->route('home')->with('success', 'Logged in successfully!');
+//     }
+
+//     return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
+// }
+
+
+public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'role' => 'required|in:user,admin', // user must select role
+        ]);
+
+
+        $email = $request->email;
+        $password = $request->password;
+        $role = $request->role;
+
+
+        $user = User::where('email', $email)->where('role', $role)->first();
+
+
+        if ($user && Hash::check($password, $user->password)) {
+            Auth::login($user);
+            $request->session()->regenerate();
+
+
+            // Redirect based on role
+            if ($role === 'admin') {
+                return redirect()->route('admin.dashboard')->with('success', 'Admin login successful!');
+            } else {
+                return redirect()->route('home')->with('success', 'Login successful!');
+            }
         }
 
-        $request->session()->regenerate();
-        return redirect()->route('home')->with('success', 'Logged in successfully!');
-    }
 
-    return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
-}
+        return back()->with('error', 'Invalid credentials or role selected.');
+    }
 
 
     // Logout
