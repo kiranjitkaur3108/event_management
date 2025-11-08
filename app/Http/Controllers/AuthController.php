@@ -58,33 +58,6 @@ class AuthController extends Controller
     }
 
     // Handle login
-//     public function login(Request $request)
-// {
-//     // Validate input
-//     $request->validate([
-//         'email' => 'required|email',
-//         'password' => 'required',
-//         'role' => 'required',
-//     ]);
-
-//     $credentials = $request->only('email', 'password');
-
-//     if (Auth::attempt($credentials)) {
-//         $user = Auth::user();
-
-//         // check role manually
-//         if ($user->role !== $request->role) {
-//             Auth::logout();
-//             return back()->withErrors(['role' => 'Selected role does not match.'])->withInput();
-//         }
-
-//         $request->session()->regenerate();
-//         return redirect()->route('home')->with('success', 'Logged in successfully!');
-//     }
-
-//     return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
-// }
-
 
 public function login(Request $request)
     {
