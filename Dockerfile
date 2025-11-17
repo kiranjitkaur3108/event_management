@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# Install required extensions
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -17,16 +17,19 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
-# Install Composer
+# Copy composer binary
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install dependencies
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Set proper permissions
+# Set correct Apache DocumentRoot to /public
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
+    && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/apache2.conf
+
+# Give permissions to storage and cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose port
 EXPOSE 80
 
 CMD ["apache2-foreground"]
