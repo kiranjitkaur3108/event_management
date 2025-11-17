@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(GallerySeeder::class);
         $this->call(AdminSeeder::class);
         $this->call(ServicesTableSeeder::class);
+        $this->call(TeamMembersTableSeeder::class);
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',

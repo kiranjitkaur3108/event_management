@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     ServiceController,
 };
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 
 use App\Models\{Feedback, User, Booking};
@@ -146,3 +147,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/book-details/submit', [BookingController::class,'store'])->name('book.submit');
     Route::get('/my-bookings', [BookingController::class,'userBookings'])->name('user.bookings');
 });
+
+
+
+//wislist
+Route::post('/wishlist/add', [WishlistController::class, 'store'])
+    ->name('wishlist.add')
+    ->middleware('auth');
+Route::get('/wishlist', [WishlistController::class, 'index'])
+    ->name('wishlist.index')
+    ->middleware('auth');
+Route::delete('/wishlist/{id}', [WishlistController::class, 'remove'])
+    ->name('wishlist.remove')
+    ->middleware('auth');
